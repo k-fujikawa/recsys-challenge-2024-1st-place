@@ -1,5 +1,5 @@
 seed: 7
-base_path: gs://recsys2024/murakami
+base_path: output
 
 candidate_path: ${exp.base_path}/preprocess/make_candidate
 

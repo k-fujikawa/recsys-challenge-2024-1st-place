@@ -22,32 +22,46 @@ Google Compute Engine: n2-highmem-64
 - **Storage**: [500GB Standard persistent disk & Google Cloud Storage] 
 
 
-## 2. Data Preparation
-1. Create the `input` directory if it doesn't exist:
+## 2. Directory&Data Preparation
+1. Create the `input`&`output` directory if it doesn't exist:
     ```bash
     mkdir -p input
+    mkdir -p output
     ```
-2. Download the dataset `ebnerd_large` from the competition website.
-    - If you want to debug, download `ebnerd_small`.
+2. Download the dataset `ebnerd_large` and `ebnerd_testset` from the competition website.
+    - If you want to use debug mode, download `ebnerd_small`.
 3. Move the downloaded dataset to the `input` directory:
 
 
 ## 3. Environment Setup
-1. Create the `output` directory if it doesn't exist:
-    ```bash
-    mkdir -p output
-    ```
-2. **Start Docker and enter bash**:
+1. **Start Docker and enter bash**:
     - It mounts input&output directory
     ```sh
     docker compose -f compose.cpu.yaml build
     docker compose -f compose.cpu.yaml run --rm kaggle bash 
     ```
 
-## 4. Feature extraction
+## 4. Training and Inference
 **Note**: This process requires significant time and memory.
 
-```sh
-# demo用テストデータの抽出
-python preprocess/test_demo/run.py 
-```
+If you want to use debug mode, append `--debug` option
+
+1. Create Candidates
+    ```sh
+    inv create-candidates
+    ```
+
+2. Feature Extraction
+    ```sh
+    inv create-features
+    ```
+
+3. Create Datasets
+    ```sh
+    inv create-datasets
+    ```
+
+4. Train & Inference
+    ```sh
+    inv train
+    ```
