@@ -18,12 +18,12 @@ Change directory to `kfujikawa` and train the models according to the [README](.
 The prediction parquet files will be output to the following paths.
 
 ```
-./data/kfujikawa/v1xxx_training/v1157_111_fix_past_v2/fold_0/predictions/validation.parquet
-./data/kfujikawa/v1xxx_training/v1157_111_fix_past_v2/fold_2/predictions/test.parquet
-./data/kfujikawa/v1xxx_training/v1170_111_L8_128d/fold_0/predictions/validation.parquet
-./data/kfujikawa/v1xxx_training/v1170_111_L8_128d/fold_2/predictions/test.parquet
-./data/kfujikawa/v1xxx_training/v1184_111_PL_bert_L4_256d/fold_0/predictions/validation.parquet
-./data/kfujikawa/v1xxx_training/v1184_111_PL_bert_L4_256d/fold_2/predictions/test.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1157_111_fix_past_v2/fold_0/predictions/validation.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1157_111_fix_past_v2/fold_2/predictions/test.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1170_111_L8_128d/fold_0/predictions/validation.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1170_111_L8_128d/fold_2/predictions/test.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1184_111_PL_bert_L4_256d/fold_0/predictions/validation.parquet
+./kfujikawa/data/kfujikawa/v1xxx_training/v1184_111_PL_bert_L4_256d/fold_2/predictions/test.parquet
 ```
 
 
