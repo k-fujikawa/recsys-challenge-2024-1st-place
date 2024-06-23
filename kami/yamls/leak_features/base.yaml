@@ -1,0 +1,167 @@
+# OK: a_click_ranking, a_click_ratio, a_click_ratio_multi, a_click_ratio_multi_v2, svd/sim系, c_is_already_clicked, u_stat_history, u_click_article_stat_v2, y_transition_prob_from_first
+# not use: c_appear_session_inview, a_appear_user_inview, c_article_imp_rank, c_is_viewed
+article_stats_cols:
+  # additional_features
+  - a_inviews_per_pageviews
+  - a_read_time_per_pageviews
+  - a_read_time_per_inviews
+  # a_base, a_base_v2
+  - a_total_inviews
+  - a_total_pageviews
+  - a_total_read_time
+  #  u_click_article_stat_v2 (history内で集約しているのでbehaviorは使っていない)
+  - u_total_inviews_std
+  - u_total_inviews_mean
+  - u_total_pageviews_mean
+  - u_total_pageviews_std
+  - u_total_read_time_std
+  - u_total_read_time_mean
+  # i_article_stat_v2 (impression, user でのグループなのでbehaviorは使っている)
+  - i_total_inviews_mean
+  - i_total_inviews_std
+  - i_total_pageviews_mean
+  - i_total_pageviews_std
+  - i_total_read_time_mean
+  - i_total_read_time_std
+  - i_time_min_diff_mean
+  - i_time_min_diff_std
+
+
+past_impression_cols:
+  # i_stat_feat
+  - i_impression_times_in_1h
+  - i_impression_times_in_24h # 過去24hのImpression回数(userごと)
+  - i_elapsed_time_since_last_impression
+  #  i_viewtime_diff
+  - i_user_prev_time_min_diff
+  - i_user_prev_time_sec_diff
+  # c_appear_imp_count,v2,v3, (ratio, rankは現在のinview情報でも使っている)
+  - c_user_count_past_all_rank_ascending
+  - c_user_count_past_5m_rank_ascending
+  - c_user_count_past_1h_rank_ascending
+  - c_user_count_past_all_rank_descending
+  - c_user_count_past_5m_rank_descending
+  - c_user_count_past_1h_rank_descending
+  - c_common_count_past_all_rank_ascending
+  - c_common_count_past_5m_rank_ascending
+  - c_common_count_past_1h_rank_ascending
+  - c_common_count_past_all_rank_descending
+  - c_common_count_past_5m_rank_descending
+  - c_common_count_past_1h_rank_descending
+  - c_user_count_past_all_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_1h_ratio
+  - c_common_count_past_5m_ratio
+  - c_common_count_past_all_ratio
+  - c_common_count_past_1h_ratio
+  # i_article_stat_v2 (impression, user でのグループなのでbehaviorは使っている)
+  - i_total_inviews_mean
+  - i_total_inviews_std
+  - i_total_pageviews_mean
+  - i_total_pageviews_std
+  - i_total_read_time_mean
+  - i_total_read_time_std
+  - i_time_min_diff_mean
+  - i_time_min_diff_std
+
+future_impression_cols:
+  # c_appear_imp_count,v2,v3,
+  - c_user_count_past_all_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_1h_ratio
+  - c_common_count_past_5m_ratio
+  - c_common_count_past_all_ratio
+  - c_common_count_past_1h_ratio
+  # c_appear_imp_count,v2,v3, (ratio, rankは現在のinview情報でも使っている)
+  - c_user_count_past_all_rank_ascending
+  - c_user_count_past_5m_rank_ascending
+  - c_user_count_past_1h_rank_ascending
+  - c_user_count_past_all_rank_descending
+  - c_user_count_past_5m_rank_descending
+  - c_user_count_past_1h_rank_descending
+  - c_common_count_past_all_rank_ascending
+  - c_common_count_past_5m_rank_ascending
+  - c_common_count_past_1h_rank_ascending
+  - c_common_count_past_all_rank_descending
+  - c_common_count_past_5m_rank_descending
+  - c_common_count_past_1h_rank_descending
+  - c_user_count_past_all_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_5m_ratio
+  - c_user_count_past_1h_ratio
+  - c_common_count_past_5m_ratio
+  - c_common_count_past_all_ratio
+  - c_common_count_past_1h_ratio
+  - c_user_count_future_5m_rank_ascending
+  - c_user_count_future_5m_ratio 
+  - c_user_count_future_1h_ratio
+  - c_user_count_future_5m_rank_descending
+  - c_user_count_future_1h_rank_ascending
+  - c_user_count_future_1h_rank_descending
+  - c_common_count_future_5m_ratio
+  - c_common_count_future_5m_rank_ascending
+  - c_common_count_future_5m_rank_descending
+  - c_common_count_future_1h_ratio
+  - c_common_count_future_1h_rank_ascending
+  - c_common_count_future_1h_rank_descending 
+  - c_user_count_future_all_rank_ascending
+  - c_user_count_future_all_rank_descending
+  - c_user_count_future_all_ratio
+  - c_common_count_future_all_ratio
+  - c_common_count_future_all_rank_ascending
+  - c_common_count_future_all_rank_descending
+  - c_user_count_past_and_future_1h_rank_ascending
+  - c_user_count_past_and_future_1h_rank_descending
+  - c_user_count_past_and_future_1h_ratio
+  - c_user_count_past_and_future_5m_rank_ascending
+  - c_user_count_past_and_future_5m_rank_descending
+  - c_user_count_past_and_future_5m_ratio
+  - c_user_count_past_and_future_all_rank_ascending
+  - c_user_count_past_and_future_all_rank_descending
+  - c_user_count_past_and_future_all_ratio
+  - c_common_count_past_and_future_1h_rank_ascending
+  - c_common_count_past_and_future_1h_rank_descending
+  - c_common_count_past_and_future_1h_ratio
+  - c_common_count_past_and_future_5m_rank_ascending
+  - c_common_count_past_and_future_5m_rank_descending
+  - c_common_count_past_and_future_5m_ratio
+  - c_common_count_past_and_future_all_rank_ascending
+  - c_common_count_past_and_future_all_rank_descending
+  - c_common_count_past_and_future_all_ratio
+  #  i_base_feat
+  - num_article_ids_inview
+  #  i_viewtime_diff
+  - i_user_next_time_min_diff
+  - i_user_next_time_sec_diff
+  # i_article_stat_v2 (inviewで集約)
+  - i_total_inviews_mean
+  - i_total_inviews_std
+  - i_total_pageviews_mean
+  - i_total_pageviews_std
+  - i_total_read_time_mean
+  - i_total_read_time_std
+  - i_time_min_diff_mean
+  - i_time_min_diff_std
+  # c_article_publish_time_v5
+  - c_time_sec_diff_rn
+  - c_time_sec_diff_per_fastest
+  # sim 系
+  - c_topics_count_svd_rn
+  - c_title_count_svd_rn
+  - c_subtitle_tfidf_svd_rn
+  - c_body_tfidf_svd_rn
+  - c_category_tfidf_sim_rn
+  - c_subcategory_tfidf_sim_rn
+  - c_entity_groups_tfidf_sim_rn
+  - c_ner_clusters_tfidf_sim_rn
+  # 
+  - c_user_is_in_future_viewed_articles
+  - c_user_is_in_next_inview
+  - c_session__is_null_next_inview
+  - c_user_is_null_next_inview
+  - i_num_article_ids_inview
+  - i_total_inviews_mean
+  - i_total_inviews_std
+  - a_total_read_time_imp_rate

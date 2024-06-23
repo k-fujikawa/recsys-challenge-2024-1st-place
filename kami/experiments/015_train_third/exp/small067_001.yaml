@@ -1,0 +1,23 @@
+defaults:
+  - base@_here_ 
+second_modes: []
+# third_modes: []
+
+size_name: small
+dataset_gcs_path: gs://recsys2024/murakami/preprocess/dataset067
+
+sampling_rate: null
+
+lgbm:
+  unuse_cols: 
+    - impression_id
+    - article_id
+    - user_id
+    - label
+  mul_cols_dict: 
+    topics_sim_mul_a_total_inviews: ['c_topics_count_svd_sim', 'a_total_inviews']
+    topics_sim_mul_a_total_pageviews: ['c_topics_count_svd_sim', 'a_total_pageviews']
+    topics_sim_mul_c_time_min_diff: ['c_topics_count_svd_sim', 'c_time_min_diff']
+  div_cols_dict:
+    c_time_min_diff_imp_rate: ['c_time_min_diff', 'i_time_min_diff_mean']
+    a_total_pageviews_imp_rate: ['a_total_pageviews', 'i_total_pageviews_mean']

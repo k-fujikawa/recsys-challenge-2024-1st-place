@@ -1,0 +1,8 @@
+input_dir: /kaggle/working/input
+output_dir: /kaggle/working/output
+exp_dir: /kaggle/working/output/experiments
+features_dir: /kaggle/working/output/features
+preprocess_dir: /kaggle/working/output/preprocess
+candidate_dir: /kaggle/working/output/preprocess/make_candidate
+
+gcs_bucket: gs://recsys2024/murakami

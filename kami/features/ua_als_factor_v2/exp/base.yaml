@@ -1,0 +1,7 @@
+seed: 9
+size_name: demo
+
+n_factors: 10
+regularization: 0.01
+iterations: 30
+num_threads: 30
