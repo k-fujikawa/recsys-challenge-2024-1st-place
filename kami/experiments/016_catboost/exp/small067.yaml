@@ -1,12 +1,11 @@
 defaults:
   - base@_here_ 
-# second_modes: []
-# third_modes: []
 
+
+sampling_rate: 0.1
 size_name: small
-dataset_gcs_path: gs://recsys2024/murakami/preprocess/dataset067
-
-sampling_rate: null
+dataset_path: output/preprocess/dataset067
+use_auc: false
 
 catboost:
   unuse_cols: 

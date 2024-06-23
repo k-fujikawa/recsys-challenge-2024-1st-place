@@ -4,7 +4,7 @@ first_modes: [train, predict, eval]
 second_modes: [train, predict]
 third_modes: [train, predict]
 
-dataset_gcs_path: gs://recsys2024/murakami/preprocess/dataset032
+dataset_path: output/preprocess/dataset032
 
 size_name: demo
 use_auc: true

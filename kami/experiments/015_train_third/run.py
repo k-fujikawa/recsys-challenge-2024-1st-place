@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import polars as pl
-from cloudpathlib import CloudPath
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
 from tqdm.auto import tqdm
@@ -305,14 +304,14 @@ def make_result_df(df: pl.DataFrame, pred: np.ndarray):
 
 def first_stage(cfg: DictConfig, output_path) -> None:
     print("first_stage")
-    dataset_path = CloudPath(cfg.exp.dataset_gcs_path)
+    dataset_path = Path(cfg.exp.dataset_path)
 
     size_name = cfg.exp.size_name
     if "train" in cfg.exp.first_modes:
         with utils.trace("load datasets"):
             train_df = pl.read_parquet(
                 str(dataset_path / size_name / "train_dataset.parquet"),
-                retries=3,
+                
             )
             if cfg.exp.sampling_rate:
                 print(f"{train_df.shape=}")
@@ -331,7 +330,7 @@ def first_stage(cfg: DictConfig, output_path) -> None:
                 gc.collect()
             validation_df = pl.read_parquet(
                 str(dataset_path / size_name / "validation_dataset.parquet"),
-                retries=3,
+                
             )
             if cfg.exp.sampling_rate:
                 # validation
@@ -370,7 +369,7 @@ def first_stage(cfg: DictConfig, output_path) -> None:
         with utils.trace("predict validation"):
             validation_df = pl.read_parquet(
                 str(dataset_path / size_name / "validation_dataset.parquet"),
-                retries=3,
+                
             )
             validation_df = process_df(cfg, validation_df)
             y_valid_pred = predict(
@@ -386,7 +385,7 @@ def first_stage(cfg: DictConfig, output_path) -> None:
         with utils.trace("predict test"):
             test_df = pl.read_parquet(
                 str(dataset_path / size_name / "test_dataset.parquet"),
-                retries=3,
+                
             )
             print(test_df.shape)
             test_df = process_df(cfg, test_df)
@@ -410,12 +409,12 @@ def first_stage(cfg: DictConfig, output_path) -> None:
         with utils.trace("load datasets"):
             validation_df = pl.read_parquet(
                 str(dataset_path / size_name / "validation_dataset.parquet"),
-                retries=3,
+                
             )
             validation_df = process_df(cfg, validation_df)
             validation_result_df = pl.read_parquet(
                 output_path / "validation_result_first.parquet",
-                retries=3,
+                
             )
         with utils.trace("prepare eval validation"):
             labels = (
@@ -448,14 +447,14 @@ def first_stage(cfg: DictConfig, output_path) -> None:
 
 def second_stage(cfg: DictConfig, output_path) -> None:
     print("second_stage")
-    dataset_path = CloudPath(cfg.exp.dataset_gcs_path)
+    dataset_path = Path(cfg.exp.dataset_path)
     size_name = cfg.exp.size_name
 
     if "train" in cfg.exp.second_modes:
         with utils.trace("load datasets"):
             validation_df = pl.read_parquet(
                 str(dataset_path / size_name / "validation_dataset.parquet"),
-                retries=3,
+                
             )
             if cfg.exp.sampling_rate:
                 random.seed(cfg.exp.seed)
@@ -495,7 +494,7 @@ def second_stage(cfg: DictConfig, output_path) -> None:
         with utils.trace("predict test"):
             test_df = pl.read_parquet(
                 str(dataset_path / size_name / "test_dataset.parquet"),
-                retries=3,
+                
             )
             test_df = process_df(cfg, test_df)
             y_pred = predict(cfg, bst, test_df, num_iteration=iteration)
@@ -517,14 +516,14 @@ def second_stage(cfg: DictConfig, output_path) -> None:
 
 def third_stage(cfg: DictConfig, output_path) -> None:
     print("third_stage")
-    dataset_path = CloudPath(cfg.exp.dataset_gcs_path)
+    dataset_path = Path(cfg.exp.dataset_path)
     size_name = cfg.exp.size_name
 
     if "train" in cfg.exp.third_modes:
         with utils.trace("load datasets"):
             train_df = pl.read_parquet(
                 str(dataset_path / size_name / "train_dataset.parquet"),
-                retries=3,
+                
             )
             if cfg.exp.sampling_rate:
                 print(f"{train_df.shape=}")
@@ -544,7 +543,7 @@ def third_stage(cfg: DictConfig, output_path) -> None:
             train_df = process_df(cfg, train_df)
             validation_df = pl.read_parquet(
                 str(dataset_path / size_name / "validation_dataset.parquet"),
-                retries=3,
+                
             )
             if cfg.exp.sampling_rate:
                 random.seed(cfg.exp.seed)
@@ -586,7 +585,7 @@ def third_stage(cfg: DictConfig, output_path) -> None:
         with utils.trace("predict test"):
             test_df = pl.read_parquet(
                 str(dataset_path / size_name / "test_dataset.parquet"),
-                retries=3,
+                
             )
             test_df = process_df(cfg, test_df)
             y_pred = predict(cfg, bst, test_df, num_iteration=iteration)

@@ -5,7 +5,7 @@ size_name: large
 sampling_rate: 0.2
 use_auc: false
 
-dataset_gcs_path: gs://recsys2024/murakami/preprocess/dataset067
+dataset_path: output/preprocess/dataset067
 
 
 lgbm:
