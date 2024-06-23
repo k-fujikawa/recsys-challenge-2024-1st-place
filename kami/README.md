@@ -8,17 +8,16 @@
 ├── compose.cpu.yaml
 ├── exp
 ├── input
-├── notebook
 ├── output
 ├── utils
-└── yamls: データのパスなど各スクリプトに共通する設定を管理
+└── yamls
 ```
 
 ## 1. Machine Specifications
-Google Compute Engine: n2-highmem-64
+Google Compute Engine: n2-highmem-96
 - **Operating System**: [Debian GNU/Linux 11]
-- **CPU**: [Intel(R) Xeon(R) CPU @ 2.80GHz, 64 vCPUs]
-- **RAM**: [512 GB]
+- **CPU**: [Intel(R) Xeon(R) CPU @ 2.80GHz, 96 vCPUs]
+- **RAM**: [768 GB]
 - **Storage**: [500GB Standard persistent disk & Google Cloud Storage] 
 
 
