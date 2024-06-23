@@ -7,7 +7,7 @@ import typer
 from loguru import logger
 from tqdm import tqdm
 
-from exputils.const import DATA_DIR, KFUJIKAWA_DIR, PREPROCESS_DIR
+from exputils.const import KAMI_DIR, KFUJIKAWA_DIR, PREPROCESS_DIR
 
 
 APP = typer.Typer(pretty_exceptions_enable=False)
@@ -15,8 +15,8 @@ FILE_DIR = Path(__file__).parent.name
 FILE_NAME = Path(__file__).stem
 OUTPUT_DIR = KFUJIKAWA_DIR / FILE_DIR / FILE_NAME
 KAMI_WEIGHTS = {
-    DATA_DIR / "murakami/experiments/015_train_third/large067_001": 2,  # FIXME: valid path
-    DATA_DIR / "murakami/experiments/016_catboost/large067": 1,  # FIXME: valid path
+    KAMI_DIR / "015_train_third/large067_001": 2,
+    KAMI_DIR / "016_catboost/large067": 1,
 }
 KAMI_SUFFIXES = {
     "validation": [
@@ -27,8 +27,8 @@ KAMI_SUFFIXES = {
     ],
 }
 KF_WEIGHTS = {
-    DATA_DIR / "kfujikawa/v1xxx_training/v1174_111_L8_128d_smpl3_drophist": 2,
-    DATA_DIR / "kfujikawa/v1xxx_training/v1170_111_L8_128d": 1,
+    KFUJIKAWA_DIR / "v1xxx_training/v1174_111_L8_128d_smpl3_drophist": 2,
+    KFUJIKAWA_DIR / "v1xxx_training/v1170_111_L8_128d": 1,
 }
 KF_SUFFIXES = {
     "validation": [

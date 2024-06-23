@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parents[2].resolve()
 DATA_DIR = ROOT_DIR / "data"
 KFUJIKAWA_DIR = DATA_DIR / "kfujikawa"
+KAMI_DIR = ROOT_DIR.parent / "kami" / "output" / "experiments"
 PREPROCESS_DIR = KFUJIKAWA_DIR / "v0xxx_preprocess"
 RAWDATA_DIRS = {
     "articles": DATA_DIR / "ebnerd" / "articles.parquet",
