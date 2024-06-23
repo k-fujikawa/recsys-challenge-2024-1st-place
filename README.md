@@ -2,9 +2,9 @@
 
 1st place solution by team :D for RecSys Challenge 2024.
 
-## 1. kami634 part
+## 1. kami part
 
-Change directory to `kami634` and train the models according to the [README](./kami634/README.md) instructions.  
+Change directory to `kami` and train the models according to the [README](./kami/README.md) instructions.  
 The prediction parquet files will be output to the following paths.
 
 ```
