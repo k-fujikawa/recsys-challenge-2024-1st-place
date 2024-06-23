@@ -1,0 +1,76 @@
+[tool.poetry]
+name = "recsys-challenge-2024"
+version = "0.1.0"
+description = ""
+authors = []
+packages = [
+  { include = "ebrec", from = "src" },
+  { include = "exp", from = "src" },
+  { include = "exputils", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.11"
+
+# General packages
+pydantic = "2.7.0"
+scipy = "1.13.0"
+typer = "0.12.2"
+tqdm = "4.66.2"
+loguru = "0.7.2"
+fsspec = "2024.3.1"
+gcsfs = "2024.3.1"
+python-dotenv = "1.0.1"
+google-cloud-storage = "2.16.0"
+universal-pathlib = "0.2.2"
+
+# For DS
+kaggle = "^1.6.11"
+pandas = "2.2.1"
+pyarrow = "15.0.2"
+polars = { version = "0.20.19", extras = ["pandas", "numpy", "pyarrow"] }
+pandarallel = "1.6.5"
+
+# For ML
+scikit-learn = "1.4.0"
+omegaconf = "2.3.0"
+hydra-slayer = "0.5.0"
+lightgbm = "4.3.0"
+xgboost = "2.0.3"
+catboost = "1.2.3"
+treelite = "4.1.2"
+treelite-runtime = "3.9.1"
+optuna = "3.6.1"
+wandb = "^0.16.6"
+
+# For DL
+torch = "2.2.2"
+accelerate = "0.29.1"
+lightning = "2.2.2"
+transformers = "4.39.3"
+tensorboard = "2.16.2"
+timm = "1.0.3"
+pytorch-toolbelt = "0.6.3"
+
+# For NLP
+tokenizers = "0.15.2"
+nltk = "3.8.1"
+
+# For Jupyter
+jupyterlab = "4.1.6"
+ipywidgets = "8.1.2"
+
+# For visualization
+plotly = "5.20.0"
+matplotlib = "3.8.4"
+seaborn = "0.13.2"
+matplotlib-venn = "0.11.10"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.5"
+ipdb = "^0.13.13"
+pytest = "^8.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
