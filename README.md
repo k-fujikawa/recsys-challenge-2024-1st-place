@@ -8,7 +8,10 @@ Change directory to `kami634` and train the models according to the [README](./k
 The prediction parquet files will be output to the following paths.
 
 ```
-...
+kami/output/experiments/015_train_third/large067_001/validation_result_first.parquet
+kami/output/experiments/015_train_third/large067_001/test_result_third.parquet
+kami/output/experiments/016_catboost/large067/validation_result_first.parquet
+kami/output/experiments/016_catboost/large067/test_result_third.parquet
 ```
 
 

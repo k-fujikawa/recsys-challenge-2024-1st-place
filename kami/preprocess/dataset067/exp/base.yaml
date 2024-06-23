@@ -1,0 +1,170 @@
+seed: 7
+base_path: output
+
+candidate_path: ${exp.base_path}/preprocess/make_candidate
+
+features:
+  factor_paths: 
+    - ${exp.base_path}/features/ua_topics_sim_count_svd_feat
+  a:
+    - ${exp.base_path}/features/a_base
+    - ${exp.base_path}/features/a_click_ranking
+    - ${exp.base_path}/features/a_additional_feature
+    - ${exp.base_path}/features/a_click_ratio
+    - ${exp.base_path}/features/a_click_ratio_multi
+  i:
+    - ${exp.base_path}/features/i_base_feat
+    - ${exp.base_path}/features/i_stat_feat 
+    - ${exp.base_path}/features/i_viewtime_diff 
+    - ${exp.base_path}/features/i_article_stat_v2
+  u: 
+    - ${exp.base_path}/features/u_stat_history
+    - ${exp.base_path}/features/u_click_article_stat_v2
+  x: []
+  'y': 
+    - ${exp.base_path}/features/y_transition_prob_from_first
+  c:
+    - ${exp.base_path}/features/c_appear_imp_count_v7 # v4から変更
+    - ${exp.base_path}/features/c_appear_imp_count_read_time_per_inview_v7
+    - ${exp.base_path}/features/c_topics_sim_count_svd
+    - ${exp.base_path}/features/c_title_tfidf_svd_sim
+    - ${exp.base_path}/features/c_subtitle_tfidf_svd_sim
+    - ${exp.base_path}/features/c_body_tfidf_svd_sim
+    - ${exp.base_path}/features/c_category_tfidf_sim
+    - ${exp.base_path}/features/c_subcategory_tfidf_sim
+    - ${exp.base_path}/features/c_entity_groups_tfidf_sim
+    - ${exp.base_path}/features/c_ner_clusters_tfidf_sim
+    - ${exp.base_path}/features/c_article_publish_time_v5
+    - ${exp.base_path}/features/c_is_already_clicked
+    
+size_name: demo
+
+unuse_cols:
+    - c_common_read_time_sum_past_5m_rank_descending
+    - c_common_read_time_sum_past_1h_rank_descending
+    - c_common_read_time_sum_future_5m_rank_descending
+    - c_common_read_time_sum_future_1h_rank_descending
+    - c_common_read_time_sum_past_and_future_5m_rank_descending
+    - c_common_read_time_sum_past_and_future_1h_rank_descending
+    # low importance
+    - c_common_count_past_and_future_all_ratio
+    - c_common_read_time_sum_future_all_ratio
+    - c_common_read_time_sum_past_5m_ratio
+    - c_common_count_future_all_rank_ascending
+    - i_total_pageviews_std
+    - c_user_count_past_and_future_all_rank_descending
+    - c_user_read_time_sum_past_and_future_all_rank_ascending
+    - c_user_read_time_sum_past_5m_rank_ascending
+    - a_click_rank
+    - c_entity_groups_tfidf_sim
+    - u_read_time_fixed_std
+    - i_total_inviews_mean
+    - i_total_read_time_mean
+    - c_user_count_past_and_future_1h_ratio
+    - i_user_prev_time_min_diff
+    - i_sentiment_score_std
+    - i_sentiment_score_mean
+    - i_user_next_time_min_diff
+    - u_scroll_percentage_fixed_skew
+    - c_subcategory_tfidf_sim_rn
+    - c_common_read_time_sum_future_all_rank_ascending
+    - c_user_count_past_1h_ratio
+    - c_user_read_time_sum_future_1h_rank_descending
+    - i_total_read_time_std
+    - c_ner_clusters_tfidf_sim_rn
+    - c_user_count_future_1h_ratio
+    - c_common_count_past_and_future_all_rank_ascending
+    - c_common_count_past_all_rank_descending
+    - c_user_read_time_sum_past_and_future_5m_ratio
+    - c_time_sec_diff_rn
+    - c_user_read_time_sum_future_all_ratio
+    - u_sentiment_score_mean
+    - c_user_read_time_sum_future_all_rank_ascending
+    - u_scroll_percentage_fixed_mean
+    - u_scroll_percentage_fixed_sum
+    - c_common_read_time_sum_future_5m_ratio
+    - c_user_read_time_sum_past_and_future_5m_rank_ascending
+    - c_topics_count_svd_rn
+    - u_scroll_percentage_fixed_std
+    - c_time_day_diff
+    - c_category_tfidf_sim_rn
+    - c_title_count_svd_rn
+    - c_subtitle_tfidf_svd_rn
+    - u_total_pageviews_mean
+    - c_user_count_future_all_ratio
+    - u_read_time_fixed_mean
+    - c_user_read_time_sum_past_and_future_1h_ratio
+    - u_read_time_fixed_sum
+    - c_entity_groups_tfidf_sim_rn
+    - u_total_read_time_mean
+    - c_user_read_time_sum_future_5m_ratio
+    - i_scroll_percentage
+    - c_common_read_time_sum_past_and_future_all_rank_ascending
+    - u_sentiment_score_std
+    - a_category_article_type
+    - u_time_min_diff_click_publish_std
+    - u_total_pageviews_std
+    - c_body_tfidf_svd_rn
+    - c_user_count_future_5m_rank_ascending
+    - c_user_read_time_sum_past_and_future_5m_rank_descending
+    - c_common_read_time_sum_past_and_future_all_ratio
+    - a_entity_groups_click_ratio_min
+    - c_common_count_past_and_future_all_rank_descending
+    - u_read_time_fixed_skew
+    - a_subcategory_len
+    - c_user_count_future_all_rank_descending
+    - c_common_count_past_all_rank_ascending
+    - u_total_read_time_std
+    - c_user_read_time_sum_future_1h_ratio
+    - u_read_time_fixed_max
+    - c_user_count_past_5m_rank_ascending
+    - c_user_read_time_sum_past_and_future_1h_rank_ascending
+    - c_common_read_time_sum_past_all_rank_descending
+    - c_user_read_time_sum_future_5m_rank_ascending
+    - c_user_count_future_all_rank_ascending
+    - a_click_count
+    - c_user_read_time_sum_past_and_future_all_rank_descending
+    - c_common_count_future_all_rank_descending
+    - c_user_read_time_sum_future_1h_rank_ascending
+    - i_impression_times_in_24h
+    - u_scroll_percentage_fixed_min
+    - i_elapsed_time_since_last_impression
+    - c_common_read_time_sum_future_all_rank_descending
+    - c_common_read_time_sum_past_all_rank_ascending
+    - i_impression_times_in_1h
+    - c_is_already_clicked
+    - c_user_count_future_5m_rank_descending
+    - c_user_count_future_1h_rank_ascending
+    - a_entity_groups_click_ratio_max
+    - c_user_read_time_sum_past_and_future_1h_rank_descending
+    - c_user_count_past_1h_rank_ascending
+    - y_transition_prob_from_first
+    - c_user_count_past_and_future_5m_rank_descending
+    - c_user_count_past_and_future_1h_rank_ascending
+    - c_common_read_time_sum_past_and_future_all_rank_descending
+    - a_ordinal_sentiment_label
+    - c_user_count_past_and_future_5m_rank_ascending
+    - c_user_read_time_sum_future_all_rank_descending
+    - c_user_count_past_5m_rank_descending
+    - c_user_count_past_and_future_1h_rank_descending
+    - i_is_subscriber
+    - y_transition_count_from_first
+    - c_user_count_future_1h_rank_descending
+    - i_is_sso_user
+    - i_num_article_ids_inview
+    - i_gender
+    - u_read_time_fixed_min
+    - c_user_count_past_1h_rank_descending
+    - i_age
+    - i_postcode
+    - u_scroll_percentage_fixed_max
+    - topic_user_emb_8
+    - topic_user_emb_7
+    - topic_user_emb_9
+    - topic_user_emb_5
+    - topic_user_emb_4
+    - topic_user_emb_3
+    - topic_user_emb_2
+    - topic_user_emb_1
+    - topic_user_emb_0
+    - topic_user_emb_6

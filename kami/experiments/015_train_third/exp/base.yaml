@@ -1,0 +1,59 @@
+seed: 7
+
+first_modes: [train, predict, eval]
+second_modes: [train, predict]
+third_modes: [train, predict]
+
+dataset_path: output/preprocess/dataset032
+
+size_name: demo
+use_auc: true
+
+sampling_rate: 1.0
+
+article_stats_cols: true
+past_impression_cols: true
+future_impression_cols: true
+
+lgbm:
+  cat_cols: [device_type]
+  unuse_cols: 
+    - impression_id
+    - article_id
+    - user_id
+    - label
+  mul_cols_dict: null
+  div_cols_dict: null
+  norm_cols_dict: null
+  label_col: label
+  verbose_eval: 10
+  num_boost_round: 400
+  early_stopping_round: 40
+  ndcg_eval_at: [5, 10]
+  params:
+    two_rounds: false
+    num_threads: 40
+    learning_rate: 0.1
+    metric: [ndcg, auc] # [auc, binary_logloss]
+    objective: lambdarank # binary
+    ndcg_eval_at: []
+    lambda_l1: 0.0
+    lambda_l2: 0.1
+    num_leaves: 128
+    feature_fraction: 0.8
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    min_child_samples: 10
+    task: train
+    boosting_type: gbdt
+    first_metric_only: true
+    max_depth: 8
+    num_thread: -1
+    max_bin: 256 
+    verbose: -1
+    device: cpu
+    scale_pos_weight: 1
+    seed: ${exp.seed}
+    num_class: 1
+    histogram_pool_size: 200000
+    force_col_wise: true

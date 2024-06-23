@@ -1,0 +1,39 @@
+seed: 7
+
+first_modes: [train, predict, eval]
+second_modes: [train, predict]
+third_modes: [train, predict]
+
+dataset_path: output/preprocess/dataset032
+
+size_name: demo
+use_auc: true
+
+sampling_rate: 1.0
+
+article_stats_cols: true
+past_impression_cols: true
+future_impression_cols: true
+
+catboost:
+  cat_cols: []
+  unuse_cols: 
+    - impression_id
+    - article_id
+    - user_id
+    - label
+  mul_cols_dict: null
+  div_cols_dict: null
+  norm_cols_dict: null
+  label_col: label
+  verbose_eval: 10
+  params:
+    iterations: 1000
+    early_stopping_rounds: 40
+    learning_rate: 0.1
+    depth: 8
+    random_seed: ${exp.seed}
+    metric_period: 10
+    eval_metric: NDCG
+
+
