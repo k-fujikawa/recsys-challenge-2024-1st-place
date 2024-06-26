@@ -31,7 +31,13 @@ poetry install
 ./src/exp/v1xxx_training/run_scratch.sh
 ```
 
-### 4.2. Pseudo labeling training
+### 4.2. Create Pseudo labels
+
+```bash
+./src/exp/v8xxx_ensemble/run_ensemble.sh
+```
+
+### 4.3. Pseudo labeling training
 
 ```bash
 ./src/exp/v1xxx_training/run_pl.sh
