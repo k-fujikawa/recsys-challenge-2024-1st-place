@@ -4,8 +4,8 @@
 
 I mainly used Google Compute Engine: c2d-highmem-112
 
-- OS: Ubuntu 20.04.2
-- CPU:  [AMD EPYC 7B13, 112 vCPUs]
+- OS: Debian GNU/Linux 11
+- CPU: [AMD EPYC 7B13, 112 vCPUs]
 - RAM: 896 GB
 - Python: 3.12.1
 
