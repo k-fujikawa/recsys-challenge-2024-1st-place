@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "recsys2024"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "^2.2.2"
+numpy = "^1.26.4"
+matplotlib = "^3.8.4"
+polars = "^0.20.21"
+lightgbm = "^4.3.0"
+jupyter = "^1.0.0"
+pyarrow = "^15.0.2"
+fastparquet = "^2024.2.0"
+matplotlib-venn = "^0.11.10"
+scikit-learn = "^1.4.2"
+tqdm = "^4.66.2"
+fsspec = "^2024.3.1"
+s3fs = "^2024.3.1"
+adlfs = "^2024.4.1"
+gcsfs = "^2024.3.1"
+pillow = "^10.3.0"
+torch = "^2.3.0"
+optuna = "^3.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
