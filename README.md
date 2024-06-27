@@ -33,7 +33,7 @@ The prediction parquet files will be output to the following paths.
 ## 3. sugawarya part
 
 Change directory to `sugawarya` and train the models according to the [README](./sugawarya/README.md) instructions.  
-The prediction parquet and submission files will be output to the following paths.
+The prediction parquet files and submission file will be output to the following paths.
 
 ```
 ./sugawarya/output/test_weighted_mean.parquet
