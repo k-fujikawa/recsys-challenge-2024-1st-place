@@ -39,7 +39,7 @@ def optimize_weight_by_optuna(explode_pred_df, pred_cols):
 
     # optimize weight with Optuna
     study = optuna.create_study(direction="maximize")
-    study.optimize(objective, n_trials=10)
+    study.optimize(objective, n_trials=200)
 
     # 結果の表示
     print("Best value: {} (params: {})\n".format(study.best_value, study.best_params))
