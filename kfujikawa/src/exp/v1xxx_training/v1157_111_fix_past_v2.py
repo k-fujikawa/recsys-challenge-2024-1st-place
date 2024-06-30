@@ -375,9 +375,6 @@ class UserFeature:
     impression_ids_in_split: np.ndarray
     user_inviews_in_split: np.ndarray
     impression_ts_in_split: np.ndarray
-    # read_time_mean_in_split: np.ndarray
-    # scroll_percentage_mean_in_split: np.ndarray
-    # scroll_zero_ratio_in_split: np.ndarray
 
 
 def create_user_feature(
@@ -408,9 +405,6 @@ def create_user_feature(
                     pl.col("impression_ids_in_split"),
                     pl.col("user_inviews_in_split"),
                     pl.col("impression_ts_in_split"),
-                    # pl.col("read_time_mean_in_split"),
-                    # pl.col("scroll_percentage_mean_in_split"),
-                    # pl.col("scroll_zero_ratio_in_split"),
                 ),
             ],
             how="horizontal",
@@ -785,9 +779,6 @@ class HistoryImpressionFeatureExtractor(FeatureExtractor):
         return [
             SinusoidalImpressionFeatureField("elapsed_ts_from_history"),
             SinusoidalImpressionFeatureField("num_history_articles"),
-            # SinusoidalImpressionFeatureField("history_read_time_mean"),
-            # SinusoidalImpressionFeatureField("history_scroll_percentage_mean"),
-            # SinusoidalImpressionFeatureField("history_scroll_zero_ratio"),
         ]
 
     def __call__(
@@ -878,9 +869,6 @@ class FutureImpressionFeatureExtractor(FeatureExtractor):
         return [
             SinusoidalImpressionFeatureField("elapsed_ts_from_future"),
             SinusoidalImpressionFeatureField("num_future_articles"),
-            # SinusoidalImpressionFeatureField("future_past_readtime_mean"),
-            # SinusoidalImpressionFeatureField("future_past_scroll_percentage_mean"),
-            # SinusoidalImpressionFeatureField("future_past_scroll_zero_ratio"),
         ]
 
     def __call__(
@@ -903,13 +891,6 @@ class FutureImpressionFeatureExtractor(FeatureExtractor):
         assert is_current_impression.sum() == 1
 
         outputs["num_future_articles"] = np.log1p(future_indices.sum())
-        # outputs["future_past_readtime_mean"] = users.read_time_mean_in_split[user_index]
-        # outputs["future_past_scroll_percentage_mean"] = (
-        #     users.scroll_percentage_mean_in_split[user_index]
-        # )
-        # outputs["future_past_scroll_zero_ratio"] = users.scroll_zero_ratio_in_split[
-        #     user_index
-        # ]
         if outputs["num_future_articles"] == 0:
             outputs["elapsed_ts_from_future"] = np.float32(0)
             outputs["future_article_indices"] = np.array([], dtype=np.int32)
@@ -965,10 +946,6 @@ class ArticleFeatureExtractor(FeatureExtractor):
                 "article_category_ids",
                 max_value=ArticleMetadataCounts.category.value,
             ),
-            # PreTrainedArticleHistorySimilarityFeatureField(
-            #     df_path=PREPROCESSED_DIR / "v0107_tfidf_svd_256/dataset.parquet",
-            #     embedding_col="ner_clusters",
-            # ),
         ]
 
     def __call__(
@@ -1007,9 +984,6 @@ class ArticleFeatureExtractor(FeatureExtractor):
         for col in [
             "topics",
             "category",
-            # "ner_clusters_ids",
-            # "subcategory_ids",
-            # "entity_groups_ids",
         ]:
             outputs[f"article_{col}_ids"] = np.stack(
                 pad_sequences(
@@ -1019,21 +993,6 @@ class ArticleFeatureExtractor(FeatureExtractor):
                     dtype=np.int32,
                 )
             )
-            # outputs[f"article_inview_{col}_ids"] = np.concatenate(
-            #     getattr(articles, col)[outputs["inview_article_indices"]],
-            #     dtype=np.int32,
-            # )
-            # outputs[f"inview_matched_{col}_normed_counts"] = (
-            #     compute_matched_article_feature_counts(
-            #         feature_ids=getattr(articles, f"{col}_ids"),
-            #         candidate_article_indices=outputs["inview_article_indices"],
-            #         reference_article_indices=outputs["inview_article_indices"],
-            #         max_feature_id=ArticleMetadataCounts[col].value,
-            #     )
-            # )
-            # outputs[f"inview_matched_{col}_normed_counts_rank_asc"] = compute_rank(
-            #     outputs[f"inview_matched_{col}_normed_counts"],
-            # )
 
         return outputs
 
@@ -1170,16 +1129,6 @@ class PastArticleFeatureExtractor(FeatureExtractor):
             SinusoidalArticleFeatureField(
                 "past_article_log_ranks",
             ),
-            # CategoricalArticleHistorySimilarityFeatureField(
-            #     "article_past_topics_ids",
-            #     max_value=ArticleMetadataCounts.topics.value,
-            #     pair_col="article_topics_ids",
-            # ),
-            # CategoricalArticleHistorySimilarityFeatureField(
-            #     "article_past_category_ids",
-            #     max_value=ArticleMetadataCounts.category.value,
-            #     pair_col="article_category_ids",
-            # ),
         ]
 
     def __call__(
@@ -1218,31 +1167,6 @@ class PastArticleFeatureExtractor(FeatureExtractor):
             np.clip(inview_features["past_article_ranks"], 0, 5)
         )
 
-        # for col in [
-        #     "category",
-        #     "topics",
-        # ]:
-        #     if len(past_article_indices) > 0:
-        #         outputs[f"article_past_{col}_ids"] = np.concatenate(
-        #             getattr(articles, f"{col}_ids")[past_article_indices[0]],
-        #             dtype=np.int32,
-        #         )
-        #     else:
-        #         outputs[f"article_past_{col}_ids"] = np.array([0], np.int32)
-
-        #     outputs[f"past_matched_{col}_normed_counts"] = (
-        #         compute_matched_article_feature_counts(
-        #             feature_ids=getattr(articles, f"{col}_ids"),
-        #             candidate_article_indices=inview_article_indices,
-        #             reference_article_indices=past_unique_articles["values"],
-        #             max_feature_id=ArticleMetadataCounts[col].value,
-        #         )
-        #     )
-        #     outputs[f"past_matched_{col}_normed_counts_rank"] = compute_rank(
-        #         outputs[f"past_matched_{col}_normed_counts"],
-        #         normalize=True,
-        #     )
-
         return outputs
 
 
@@ -1258,16 +1182,6 @@ class FutureArticleFeatureExtractor(FeatureExtractor):
             SinusoidalArticleFeatureField(
                 "future_article_log_ranks",
             ),
-            # CategoricalArticleHistorySimilarityFeatureField(
-            #     "article_future_topics_ids",
-            #     max_value=ArticleMetadataCounts.topics.value,
-            #     pair_col="article_topics_ids",
-            # ),
-            # CategoricalArticleHistorySimilarityFeatureField(
-            #     "article_future_category_ids",
-            #     max_value=ArticleMetadataCounts.category.value,
-            #     pair_col="article_category_ids",
-            # ),
         ]
 
     def __call__(
@@ -1305,30 +1219,6 @@ class FutureArticleFeatureExtractor(FeatureExtractor):
         outputs["future_article_log_ranks"] = np.log1p(
             np.clip(inview_features["future_article_ranks"], 0, 5)
         )
-
-        # for col in [
-        #     "category",
-        #     "topics",
-        # ]:
-        #     if len(future_article_indices) > 0:
-        #         outputs[f"article_future_{col}_ids"] = np.concatenate(
-        #             getattr(articles, f"{col}_ids")[future_article_indices[0]],
-        #             dtype=np.int32,
-        #         )
-        #     else:
-        #         outputs[f"article_future_{col}_ids"] = np.array([0], np.int32)
-
-        #     outputs[f"future_matched_{col}_normed_counts"] = (
-        #         compute_matched_article_feature_counts(
-        #             feature_ids=getattr(articles, f"{col}_ids"),
-        #             candidate_article_indices=inview_article_indices,
-        #             reference_article_indices=future_unique_articles["values"],
-        #             max_feature_id=ArticleMetadataCounts[col].value,
-        #         )
-        #     )
-        #     outputs[f"future_matched_{col}_normed_counts_rank"] = compute_rank(
-        #         outputs[f"future_matched_{col}_normed_counts"],
-        #     )
 
         return outputs
 
@@ -1525,29 +1415,6 @@ class GlobalFutureArticleFeatureExtractor(FeatureExtractor):
             ),
         ]
 
-        # # 24h
-        # ts_prev, ts_next = -1440, 0
-        # fields += [
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_normed_counts",
-        #     ),
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_counts_rank",
-        #     ),
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_readtime_sum_rank",
-        #     ),
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_readtime_mean_rank",
-        #     ),
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_scroll_percentage_mean",
-        #     ),
-        #     SinusoidalArticleFeatureField(
-        #         f"global_article_{ts_prev}m_{ts_next}m_scroll_zero_mean",
-        #     ),
-        # ]
-
         return fields
 
     def __call__(
@@ -1691,12 +1558,6 @@ class FutureStatisticsArticleFeatureExtractor(FeatureExtractor):
             SinusoidalArticleFeatureField(
                 "article_total_read_time_rank",
             ),
-            # SinusoidalArticleFeatureField(
-            #     "article_pageviews_per_inviews",
-            # ),
-            # SinusoidalArticleFeatureField(
-            #     "article_read_time_per_inviews",
-            # ),
         ]
 
     def __call__(
@@ -1723,12 +1584,6 @@ class FutureStatisticsArticleFeatureExtractor(FeatureExtractor):
         outputs["article_total_read_time_rank"] = compute_rank(
             articles.total_read_time[inview_article_indices],
         )
-        # outputs["article_pageviews_per_inviews"] = articles.total_pageviews[
-        #     inview_article_indices
-        # ] / articles.total_inviews[inview_article_indices].clip(1)
-        # outputs["article_read_time_per_inviews"] = articles.total_read_time[
-        #     inview_article_indices
-        # ] / articles.total_inviews[inview_article_indices].clip(1)
 
         return outputs
 
@@ -2145,10 +2000,6 @@ class ArticleEmbedding(torch.nn.Module):
                         embedding_dim=sinusoidal_dim,
                         padding_idx=f.padding_idx,
                     ),
-                    # torch.nn.Dropout(0.1),
-                    # Lambda(lambda x: x.permute(0, 2, 1)),
-                    # torch.nn.BatchNorm1d(sinusoidal_dim),
-                    # Lambda(lambda x: x.permute(0, 2, 1)),
                 )
                 for f in FeatureExtractionPipeline.get_fields(
                     SinusoidalArticleFeatureField
@@ -2329,8 +2180,6 @@ class ImpressionEmbedding(torch.nn.Module):
                         embedding_dim=sinusoidal_dim,
                         padding_idx=f.padding_idx,
                     ),
-                    # torch.nn.Dropout(0.1),
-                    # torch.nn.BatchNorm1d(sinusoidal_dim),
                 )
                 for f in FeatureExtractionPipeline.get_fields(
                     SinusoidalImpressionFeatureField
