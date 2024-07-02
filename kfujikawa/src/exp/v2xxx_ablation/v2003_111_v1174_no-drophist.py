@@ -93,7 +93,7 @@ class CommonConfig:
     fold: int = 0
     batch_size: int = 64
     max_epochs: int = 5
-    num_epochs: int = 3
+    num_epochs: int = 4
     ckpt_epochs: int = 3
     max_samples: int | None = None
     num_workers: int = min(
@@ -153,7 +153,7 @@ class DataLoadersConfig:
         ),
         batch_sampler=DataLoaderConfig.BatchSamplerConfig(
             dataset={"_var_": "train_dataset"},
-            max_sample_per_user=2,
+            max_sample_per_user=3,
             shuffle=True,
             drop_last=True,
         ),
@@ -866,14 +866,14 @@ class HistoryImpressionFeatureExtractor(FeatureExtractor):
         outputs = {}
 
         history_mask = np.full(len(users.article_indices[user_index]), True)
-        drop_prob = 0.3
-        if split == "train" and np.random.rand() < drop_prob:
-            history_mask = np.random.choice(
-                [True, False],
-                size=len(history_mask),
-                p=[1 - drop_prob, drop_prob],
-            )
-            history_mask[-1] = True
+        # drop_prob = 0.3
+        # if split == "train" and np.random.rand() < drop_prob:
+        #     history_mask = np.random.choice(
+        #         [True, False],
+        #         size=len(history_mask),
+        #         p=[1 - drop_prob, drop_prob],
+        #     )
+        #     history_mask[-1] = True
 
         outputs["history_mask"] = history_mask
         outputs["num_history_articles"] = np.log1p(
@@ -1320,8 +1320,11 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
     @property
     def fields(self) -> list[FeatureField]:
         fields = []
-        ts_prev, ts_next = -10, 0
+        ts_prev, ts_next = -11, -1
         fields += [
+            SinusoidalArticleFeatureField(
+                f"global_article_{ts_prev}m_{ts_next}m_counts",
+            ),
             SinusoidalArticleFeatureField(
                 f"global_article_{ts_prev}m_{ts_next}m_normed_counts",
             ),
@@ -1329,11 +1332,17 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
                 f"global_article_{ts_prev}m_{ts_next}m_counts_rank",
             ),
             SinusoidalArticleFeatureField(
+                f"global_article_{ts_prev}m_{ts_next}m_readtime_sum",
+            ),
+            SinusoidalArticleFeatureField(
                 f"global_article_{ts_prev}m_{ts_next}m_readtime_sum_rank",
+            ),
+            SinusoidalArticleFeatureField(
+                f"global_article_{ts_prev}m_{ts_next}m_readtime_mean",
             ),
         ]
 
-        ts_prev, ts_next = -60, 0
+        ts_prev, ts_next = -61, -1
         fields += [
             SinusoidalArticleFeatureField(
                 f"global_article_{ts_prev}m_{ts_next}m_normed_counts",
@@ -1345,10 +1354,13 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
                 f"global_article_{ts_prev}m_{ts_next}m_readtime_sum_rank",
             ),
             SinusoidalArticleFeatureField(
-                f"global_article_{ts_prev}m_{ts_next}m_scroll_percentage_mean",
+                f"global_article_{ts_prev}m_{ts_next}m_readtime_mean",
             ),
             SinusoidalArticleFeatureField(
-                f"global_article_{ts_prev}m_{ts_next}m_scroll_zero_mean",
+                f"global_article_{ts_prev}m_{ts_next}m_scroll_mean",
+            ),
+            SinusoidalArticleFeatureField(
+                f"global_article_{ts_prev}m_{ts_next}m_scroll_zero_ratio",
             ),
         ]
 
@@ -1369,7 +1381,7 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
         scroll_zero_counts = articles.scroll_zero_counts[inview_article_indices]
 
         # Aggregation features for (-10m, +0m)
-        ts_prev, ts_next = -10, 0
+        ts_prev, ts_next = -11, -1
         prefix = f"global_article_{ts_prev}m_{ts_next}m"
         counts = compute_ts_agg_features(
             min_ts=inview_elapsed_min + ts_prev,
@@ -1385,12 +1397,15 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
             ref_ts=read_time_sum,
             agg=np.sum,
         )
-        outputs[f"{prefix}_readtime_sum_rank"] = compute_rank(readtimes)
+        outputs[f"{prefix}_counts"] = counts
         outputs[f"{prefix}_normed_counts"] = counts / counts.max().clip(1)
         outputs[f"{prefix}_counts_rank"] = compute_rank(counts)
+        outputs[f"{prefix}_readtime_sum"] = readtimes
+        outputs[f"{prefix}_readtime_mean"] = readtimes / counts.clip(1)
+        outputs[f"{prefix}_readtime_sum_rank"] = compute_rank(readtimes)
 
         # Aggregation features for (-60m, +0m)
-        ts_prev, ts_next = -60, 0
+        ts_prev, ts_next = -61, -1
         prefix = f"global_article_{ts_prev}m_{ts_next}m"
         counts = compute_ts_agg_features(
             min_ts=inview_elapsed_min + ts_prev,
@@ -1413,20 +1428,19 @@ class GlobalPastArticleFeatureExtractor(FeatureExtractor):
             ref_ts=scroll_percentage_sum,
             agg=np.sum,
         )
-        scroll_zero_counts = compute_ts_agg_features(
+        scroll_zeros = compute_ts_agg_features(
             min_ts=inview_elapsed_min + ts_prev,
             max_ts=inview_elapsed_min + ts_next,
             src_ts=inview_elapsed_mins,
             ref_ts=scroll_zero_counts,
             agg=np.sum,
         )
-        outputs[f"{prefix}_readtime_sum_rank"] = compute_rank(readtimes)
         outputs[f"{prefix}_normed_counts"] = counts / counts.max().clip(1)
         outputs[f"{prefix}_counts_rank"] = compute_rank(counts)
-        outputs[f"{prefix}_scroll_percentage_mean"] = scroll_percentages / counts.clip(
-            1
-        )
-        outputs[f"{prefix}_scroll_zero_mean"] = scroll_zero_counts / counts.clip(1)
+        outputs[f"{prefix}_readtime_sum_rank"] = compute_rank(readtimes)
+        outputs[f"{prefix}_readtime_mean"] = readtimes / counts.clip(1)
+        outputs[f"{prefix}_scroll_mean"] = scroll_percentages / counts.clip(1)
+        outputs[f"{prefix}_scroll_zero_ratio"] = scroll_zeros / counts.clip(1)
 
         return outputs
 
