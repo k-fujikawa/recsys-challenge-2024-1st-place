@@ -205,25 +205,10 @@ class ModelConfig:
 
     @dataclass
     class EncoderConfig:
-        @dataclass
-        class TransformerEncoderLayerConfig:
-            @dataclass
-            class Activation:
-                _target_: str = "torch.nn.GELU"
-
-            _target_: str = "TransformerEncoderLayer"
-            d_model: int = SI("${model.embedding.output_dim}")
-            nhead: int = SI("${eval: ${.d_model} // 32}")
-            dim_feedforward: int = SI("${eval: ${.d_model} * 2}")
-            dropout: float = 0.1
-            activation: Activation = Activation()
-            b2t_connection: bool = False
-            batch_first: bool = True
-            norm_first: bool = True
-
-        _target_: str = "torch.nn.TransformerEncoder"
-        encoder_layer: TransformerEncoderLayerConfig = TransformerEncoderLayerConfig()
+        _target_: str = "MLP"
         num_layers: int = 8
+        hidden_dim: int = 128
+        dropout: float = 0.
 
     @dataclass
     class PredictionHeadConfig:
@@ -866,14 +851,14 @@ class HistoryImpressionFeatureExtractor(FeatureExtractor):
         outputs = {}
 
         history_mask = np.full(len(users.article_indices[user_index]), True)
-        # drop_prob = 0.3
-        # if split == "train" and np.random.rand() < drop_prob:
-        #     history_mask = np.random.choice(
-        #         [True, False],
-        #         size=len(history_mask),
-        #         p=[1 - drop_prob, drop_prob],
-        #     )
-        #     history_mask[-1] = True
+        drop_prob = 0.3
+        if split == "train" and np.random.rand() < drop_prob:
+            history_mask = np.random.choice(
+                [True, False],
+                size=len(history_mask),
+                p=[1 - drop_prob, drop_prob],
+            )
+            history_mask[-1] = True
 
         outputs["history_mask"] = history_mask
         outputs["num_history_articles"] = np.log1p(
@@ -2500,6 +2485,30 @@ class TransformerEncoderLayer(torch.nn.TransformerEncoderLayer):
 
 
 @REGISTRY.add
+class MLP(torch.nn.Module):
+    def __init__(
+        self,
+        hidden_dim: int,
+        num_layers: int,
+        dropout: float,
+    ):
+        super().__init__()
+        self.layers = torch.nn.Sequential(
+            *[
+                torch.nn.Sequential(
+                    torch.nn.Linear(hidden_dim, hidden_dim),
+                    torch.nn.ReLU(),
+                    torch.nn.Dropout(dropout),
+                )
+                for _ in range(num_layers)
+            ]
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+
+
+@REGISTRY.add
 class PredictionHead(torch.nn.Module):
     def __init__(
         self,
@@ -2557,6 +2566,8 @@ class Model(L.LightningModule):
                 src_key_padding_mask=~xs["attention_mask"],
             )
             # h = h[:, 1:]
+        elif isinstance(self.encoder, MLP):
+            h = self.encoder(xs["h"])
         else:
             h = self.encoder(
                 inputs_embeds=xs["h"],
